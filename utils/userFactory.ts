@@ -6,13 +6,19 @@ export class UserFactory {
    * Generate a complete user registration request with all fields
    */
   static generateUser(overrides?: Partial<RegisterRequest>): RegisterRequest {
+    let firstName = faker.person.firstName();
+    let lastName = faker.person.lastName();
+    let email = faker.internet.email({ firstName, lastName }).toLowerCase();
+    let username = faker.internet.username({ firstName, lastName }).toLowerCase() + '.' + faker.string.alphanumeric(5);
+    let phoneNumber = faker.phone.number();
+
     return {
-      username: faker.internet.username().toLowerCase(),
+      username: username,
       password: this.generateSecurePassword(),
-      email: faker.internet.email().toLowerCase(),
-      firstName: faker.person.firstName(),
-      lastName: faker.person.lastName(),
-      phoneNumber: faker.phone.number(),
+      email: email,
+      firstName: firstName,
+      lastName: lastName,
+      phoneNumber: phoneNumber,
       ...overrides,
     };
   }
