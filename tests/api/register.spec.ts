@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import { ApiClient } from '../../utils/apiClient';
 import { ResponseValidator } from '../../utils/responseValidator';
 import { UserFactory } from '../../utils/userFactory';
-import { endpoints } from '../../config/api.config';
+import { LittleBugShop } from '../../utils/urlBuilder';
 import { RegisterRequest, RegisterResponse } from '../../models/user.models';
 
 test.describe('User Registration API Tests - POST /api/Users/register', () => {
@@ -15,7 +15,7 @@ test.describe('User Registration API Tests - POST /api/Users/register', () => {
   test('should successfully register a new user with valid data', async () => {
     const registerData = UserFactory.generateUser();
 
-    const response = await apiClient.post(endpoints.register, {
+    const response = await apiClient.post(LittleBugShop().Users.register(), {
       data: registerData,
     });
 
@@ -38,7 +38,7 @@ test.describe('User Registration API Tests - POST /api/Users/register', () => {
   test('should successfully register a new user without optional phone number', async () => {
     const registerData = UserFactory.generateMinimalUser();
 
-    const response = await apiClient.post(endpoints.register, {
+    const response = await apiClient.post(LittleBugShop().Users.register(), {
       data: registerData,
     });
 
@@ -55,7 +55,7 @@ test.describe('User Registration API Tests - POST /api/Users/register', () => {
     const registerData = UserFactory.generateUserWithUsername(username);
 
     // First registration
-    const firstResponse = await apiClient.post(endpoints.register, {
+    const firstResponse = await apiClient.post(LittleBugShop().Users.register(), {
       data: registerData,
     });
     await ResponseValidator.validateStatusCode(firstResponse, 200);
@@ -63,7 +63,7 @@ test.describe('User Registration API Tests - POST /api/Users/register', () => {
     // Attempt duplicate registration with same username
     const duplicateData = UserFactory.generateUserWithUsername(username);
 
-    const duplicateResponse = await apiClient.post(endpoints.register, {
+    const duplicateResponse = await apiClient.post(LittleBugShop().Users.register(), {
       data: duplicateData,
     });
 
@@ -76,7 +76,7 @@ test.describe('User Registration API Tests - POST /api/Users/register', () => {
     const registerData = UserFactory.generateUserWithEmail(email);
 
     // First registration
-    const firstResponse = await apiClient.post(endpoints.register, {
+    const firstResponse = await apiClient.post(LittleBugShop().Users.register(), {
       data: registerData,
     });
     await ResponseValidator.validateStatusCode(firstResponse, 200);
@@ -84,7 +84,7 @@ test.describe('User Registration API Tests - POST /api/Users/register', () => {
     // Attempt duplicate registration with same email
     const duplicateData = UserFactory.generateUserWithEmail(email);
 
-    const duplicateResponse = await apiClient.post(endpoints.register, {
+    const duplicateResponse = await apiClient.post(LittleBugShop().Users.register(), {
       data: duplicateData,
     });
 
@@ -96,7 +96,7 @@ test.describe('User Registration API Tests - POST /api/Users/register', () => {
     const userData = UserFactory.generateUser();
     const { username, ...incompleteData } = userData;
 
-    const response = await apiClient.post(endpoints.register, {
+    const response = await apiClient.post(LittleBugShop().Users.register(), {
       data: incompleteData,
     });
 
@@ -108,7 +108,7 @@ test.describe('User Registration API Tests - POST /api/Users/register', () => {
     const userData = UserFactory.generateUser();
     const { password, ...incompleteData } = userData;
 
-    const response = await apiClient.post(endpoints.register, {
+    const response = await apiClient.post(LittleBugShop().Users.register(), {
       data: incompleteData,
     });
 
@@ -120,7 +120,7 @@ test.describe('User Registration API Tests - POST /api/Users/register', () => {
     const userData = UserFactory.generateUser();
     const { email, ...incompleteData } = userData;
 
-    const response = await apiClient.post(endpoints.register, {
+    const response = await apiClient.post(LittleBugShop().Users.register(), {
       data: incompleteData,
     });
 
@@ -131,7 +131,7 @@ test.describe('User Registration API Tests - POST /api/Users/register', () => {
   test('should reject registration with invalid email format', async () => {
     const registerData = UserFactory.generateUserWithInvalidEmail();
 
-    const response = await apiClient.post(endpoints.register, {
+    const response = await apiClient.post(LittleBugShop().Users.register(), {
       data: registerData,
     });
 
@@ -142,7 +142,7 @@ test.describe('User Registration API Tests - POST /api/Users/register', () => {
   test('should reject registration with weak password', async () => {
     const registerData = UserFactory.generateUserWithWeakPassword();
 
-    const response = await apiClient.post(endpoints.register, {
+    const response = await apiClient.post(LittleBugShop().Users.register(), {
       data: registerData,
     });
 
@@ -153,7 +153,7 @@ test.describe('User Registration API Tests - POST /api/Users/register', () => {
   test('should reject registration with empty string values', async () => {
     const registerData = UserFactory.generateUserWithEmptyFields();
 
-    const response = await apiClient.post(endpoints.register, {
+    const response = await apiClient.post(LittleBugShop().Users.register(), {
       data: registerData,
     });
 
@@ -164,7 +164,7 @@ test.describe('User Registration API Tests - POST /api/Users/register', () => {
   test('should handle special characters in username', async () => {
     const registerData = UserFactory.generateUserWithSpecialUsername();
 
-    const response = await apiClient.post(endpoints.register, {
+    const response = await apiClient.post(LittleBugShop().Users.register(), {
       data: registerData,
     });
 
@@ -180,7 +180,7 @@ test.describe('User Registration API Tests - POST /api/Users/register', () => {
   test('should validate response structure for successful registration', async () => {
     const registerData = UserFactory.generateUser();
 
-    const response = await apiClient.post(endpoints.register, {
+    const response = await apiClient.post(LittleBugShop().Users.register(), {
       data: registerData,
     });
 

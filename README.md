@@ -153,6 +153,30 @@ npm run test:report
 
 ## 🛠️ Test Utilities
 
+### URL Builder
+
+Build API endpoint URLs with a fluent, type-safe interface:
+
+```typescript
+import { LittleBugShop } from '../../utils/urlBuilder';
+
+// Basic usage
+const url = LittleBugShop().Users.register();
+// Returns: "http://localhost:5052/api/Users/register"
+
+// With ID parameters
+const userUrl = LittleBugShop().Users.getById(123);
+// Returns: "http://localhost:5052/api/Users/123"
+
+// Other endpoints
+LittleBugShop().Users.login()
+LittleBugShop().Products.getById(456)
+LittleBugShop().Cart.checkout()
+LittleBugShop().Orders.myOrders()
+```
+
+See [URL Builder Documentation](docs/UrlBuilder.md) for complete API reference.
+
 ### UserFactory
 
 Generate realistic user test data using Faker:
