@@ -17,7 +17,7 @@ export default defineConfig({
     ['allure-playwright'],
   ],
   use: {
-    baseURL: process.env.BASE_URL || 'https://api.example.com',
+    baseURL: process.env.BASE_URL || 'http://localhost:5052',
     extraHTTPHeaders: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
