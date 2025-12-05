@@ -227,7 +227,7 @@ test.describe('Product Creation API Tests - Admin User Authorization - POST /api
     });
 
     await test.step('Verify response based on API validation rules', async () => {
-      expect([400, 201], 'Invalid ISBN should either be rejected (400) or accepted (201) based on API rules').toContain(response.status());
+      expect(response.status(), 'Invalid ISBN should either be rejected (400) or accepted (201) based on API rules').toBe(400);
     });
   });
 

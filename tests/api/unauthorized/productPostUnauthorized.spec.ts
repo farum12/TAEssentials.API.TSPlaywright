@@ -8,7 +8,6 @@ import { TestDecorators, TestSeverity as Severity } from '../../../utils/testDec
 
 test.describe('Product Creation API Tests - Regular User Authorization - POST /api/Products', () => {
   let apiClient: ApiClient;
-  let authToken: string;
 
   TestDecorators.setupTestDescribe({
     suite: 'Product Management API Tests',
