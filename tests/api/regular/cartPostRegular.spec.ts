@@ -390,7 +390,7 @@ test.describe('Cart Management API Tests - Regular User - POST /api/Cart/items',
     });
 
     await test.step('Verify request is rejected with 404 or 400', async () => {
-      expect([400, 404], 'Non-existent product should be rejected with 400 or 404').toContain(response.status());
+      expect(response.status(), 'Non-existent product should be rejected with 404').toBe(404);
     });
   });
 });

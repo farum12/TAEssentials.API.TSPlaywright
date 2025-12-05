@@ -157,6 +157,10 @@ expect(response.status(), 'Product creation with empty name should be rejected w
 ## 4. Authentication & Authorization Patterns
 
 ### 4.1 Authentication in beforeEach
+
+#### 4.1.1 Single User Context
+For tests requiring only one user role, use `async ({ request })`:
+
 ```typescript
 test.beforeEach(async ({ request }) => {
   apiClient = new ApiClient(request);
@@ -174,6 +178,43 @@ test.beforeEach(async ({ request }) => {
   authToken = loginResult.token;
 });
 ```
+
+#### 4.1.2 Multiple User Contexts
+**CRITICAL**: For tests requiring multiple user roles (e.g., admin + regular user), use `async ({ browser })` to create separate browser contexts. This prevents mixing user sessions.
+
+```typescript
+test.beforeEach(async ({ browser }) => {
+  // Create separate context for regular user
+  let apiRequestContextRegular = (await browser.newContext()).request;
+  apiClientRegular = new ApiClient(apiRequestContextRegular);
+
+  const loginResponse = await apiClientRegular.post(LittleBugShop().Controllers.Users.login, {
+    data: {
+      username: 'User',
+      password: 'qazwsxedcrfv12345'
+    }
+  });
+  expect(loginResponse.status(), 'Regular user login should return 200 status').toBe(200);
+  const loginResult = await ResponseValidator.getResponseBody<{ token: string }>(loginResponse);
+  authTokenRegular = loginResult.token;
+
+  // Create separate context for admin user
+  let apiRequestContextAdmin = (await browser.newContext()).request;
+  apiClientAdmin = new ApiClient(apiRequestContextAdmin);
+
+  const adminLoginResponse = await apiClientAdmin.post(LittleBugShop().Controllers.Users.login, {
+    data: {
+      username: 'admin',
+      password: 'admin123'
+    }
+  });
+  expect(adminLoginResponse.status(), 'Admin user login should return 200 status').toBe(200);
+  const adminLoginResult = await ResponseValidator.getResponseBody<{ token: string }>(adminLoginResponse);
+  authTokenAdmin = adminLoginResult.token;
+});
+```
+
+**Why this matters**: Each `browser.newContext()` creates an isolated browser context with its own cookies, storage, and cache. This ensures that authentication tokens and session data don't leak between different user roles in the same test.
 
 **Credentials**:
 - **Admin**: username: `'admin'`, password: `'admin123'`
