@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { ApiClient } from '../../utils/apiClient';
 import { ResponseValidator } from '../../utils/responseValidator';
-import { UserFactory } from '../../utils/userFactory';
+import { UserFactory } from '../../utils/factories/userFactory';
 import { LittleBugShop } from '../../utils/urlBuilders/littleBugShopUrlBuilder';
 import { RegisterRequest, RegisterResponse } from '../../models/user.models';
 import { TestDecorators, TestSeverity as Severity } from '../../utils/testDecorators';

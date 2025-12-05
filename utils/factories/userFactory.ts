@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker';
-import { RegisterRequest } from '../models/user.models';
+import { RegisterRequest } from '../../models/user.models';
 
 export class UserFactory {
   /**

@@ -1,5 +1,4 @@
 import { base } from '@faker-js/faker/.';
-import { config } from '../../config/api.config';
 import { createLittleBugShopEndpoints } from './enpoints/littleBugShopEnpoints';
 
 /**
