@@ -2,9 +2,9 @@ import { test, expect } from '@playwright/test';
 import { ApiClient } from '../../utils/apiClient';
 import { ResponseValidator } from '../../utils/responseValidator';
 import { UserFactory } from '../../utils/userFactory';
-import { LittleBugShop } from '../../utils/urlBuilder';
+import { LittleBugShop } from '../../utils/urlBuilders/littleBugShopUrlBuilder';
 import { RegisterRequest, RegisterResponse } from '../../models/user.models';
-import { TestDecorators, TestSeverity as Severity } from '@utils/testDecorators';
+import { TestDecorators, TestSeverity as Severity } from '../../utils/testDecorators';
 
   let apiClient: ApiClient;
 
@@ -38,7 +38,7 @@ test.describe('User Registration API Tests - POST /api/Users/register', () => {
     });
 
     await test.step('Send registration request', async () => {
-      response = await apiClient.post(LittleBugShop().Users.register(), {
+      response = await apiClient.post(LittleBugShop().Controllers.Users.register, {
         data: registerData,
       });
     });
@@ -81,7 +81,7 @@ test.describe('User Registration API Tests - POST /api/Users/register', () => {
     });
 
     await test.step('Send registration request', async () => {
-      response = await apiClient.post(LittleBugShop().Users.register(), {
+      response = await apiClient.post(LittleBugShop().Controllers.Users.register, {
         data: registerData,
       });
     });
@@ -119,7 +119,7 @@ test.describe('User Registration API Tests - POST /api/Users/register', () => {
     });
 
     await test.step('Register first user successfully', async () => {
-      firstResponse = await apiClient.post(LittleBugShop().Users.register(), {
+      firstResponse = await apiClient.post(LittleBugShop().Controllers.Users.register, {
         data: registerData,
       });
       expect(firstResponse.status()).toBe(201);
@@ -127,7 +127,7 @@ test.describe('User Registration API Tests - POST /api/Users/register', () => {
 
     await test.step('Attempt duplicate registration with same username', async () => {
       duplicateData = UserFactory.generateUserWithUsername(username);
-      duplicateResponse = await apiClient.post(LittleBugShop().Users.register(), {
+      duplicateResponse = await apiClient.post(LittleBugShop().Controllers.Users.register, {
         data: duplicateData,
       });
     });
@@ -156,7 +156,7 @@ test.describe('User Registration API Tests - POST /api/Users/register', () => {
     });
 
     await test.step('Register first user successfully', async () => {
-      firstResponse = await apiClient.post(LittleBugShop().Users.register(), {
+      firstResponse = await apiClient.post(LittleBugShop().Controllers.Users.register, {
         data: registerData,
       });
       expect(firstResponse.status()).toBe(201);
@@ -164,7 +164,7 @@ test.describe('User Registration API Tests - POST /api/Users/register', () => {
 
     await test.step('Attempt duplicate registration with same email', async () => {
       duplicateData = UserFactory.generateUserWithEmail(email);
-      duplicateResponse = await apiClient.post(LittleBugShop().Users.register(), {
+      duplicateResponse = await apiClient.post(LittleBugShop().Controllers.Users.register, {
         data: duplicateData,
       });
     });
@@ -191,7 +191,7 @@ test.describe('User Registration API Tests - POST /api/Users/register', () => {
     });
 
     await test.step('Send registration request with missing username', async () => {
-      response = await apiClient.post(LittleBugShop().Users.register(), {
+      response = await apiClient.post(LittleBugShop().Controllers.Users.register, {
         data: incompleteData,
       });
     });
@@ -218,7 +218,7 @@ test.describe('User Registration API Tests - POST /api/Users/register', () => {
     });
 
     await test.step('Send registration request with missing password', async () => {
-      response = await apiClient.post(LittleBugShop().Users.register(), {
+      response = await apiClient.post(LittleBugShop().Controllers.Users.register, {
         data: incompleteData,
       });
     });
@@ -245,7 +245,7 @@ test.describe('User Registration API Tests - POST /api/Users/register', () => {
     });
 
     await test.step('Send registration request with missing email', async () => {
-      response = await apiClient.post(LittleBugShop().Users.register(), {
+      response = await apiClient.post(LittleBugShop().Controllers.Users.register, {
         data: incompleteData,
       });
     });
@@ -270,7 +270,7 @@ test.describe('User Registration API Tests - POST /api/Users/register', () => {
     });
 
     await test.step('Send registration request with invalid email', async () => {
-      response = await apiClient.post(LittleBugShop().Users.register(), {
+      response = await apiClient.post(LittleBugShop().Controllers.Users.register, {
         data: registerData,
       });
     });
@@ -295,7 +295,7 @@ test.describe('User Registration API Tests - POST /api/Users/register', () => {
     });
 
     await test.step('Send registration request with weak password', async () => {
-      response = await apiClient.post(LittleBugShop().Users.register(), {
+      response = await apiClient.post(LittleBugShop().Controllers.Users.register, {
         data: registerData,
       });
     });
@@ -320,7 +320,7 @@ test.describe('User Registration API Tests - POST /api/Users/register', () => {
     });
 
     await test.step('Send registration request with empty fields', async () => {
-      response = await apiClient.post(LittleBugShop().Users.register(), {
+      response = await apiClient.post(LittleBugShop().Controllers.Users.register, {
         data: registerData,
       });
     });
@@ -345,7 +345,7 @@ test.describe('User Registration API Tests - POST /api/Users/register', () => {
     });
 
     await test.step('Send registration request with special username', async () => {
-      response = await apiClient.post(LittleBugShop().Users.register(), {
+      response = await apiClient.post(LittleBugShop().Controllers.Users.register, {
         data: registerData,
       });
     });
@@ -376,7 +376,7 @@ test.describe('User Registration API Tests - POST /api/Users/register', () => {
     });
 
     await test.step('Send registration request', async () => {
-      response = await apiClient.post(LittleBugShop().Users.register(), {
+      response = await apiClient.post(LittleBugShop().Controllers.Users.register, {
         data: registerData,
       });
     });
