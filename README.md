@@ -1,179 +1,214 @@
-# LittleBugShop API Test Automation
+# TAEssentials.API.TSPlaywright
 
-A comprehensive API test automation framework for **LittleBugShop** built with TypeScript and Playwright.
+A comprehensive TypeScript-based API testing framework built with Playwright, designed for testing the LittleBugShop API with professional-grade test organization, reporting, and maintainability.
 
-## 📋 About
+## 🎯 Overview
 
-This framework provides automated API testing for the LittleBugShop application, focusing on robust validation of API endpoints with comprehensive test coverage.
+This project demonstrates enterprise-level API testing practices using TypeScript and Playwright Test, featuring:
+
+- **Structured test organization** by authorization levels (admin, regular user, unauthorized)
+- **Factory pattern** for test data generation with Faker.js
+- **Fluent URL builder** for endpoint construction
+- **Comprehensive test reporting** with Allure integration
+- **Type-safe utilities** for API interactions and response validation
+- **Self-documenting tests** with meaningful assertions and step-by-step reporting
+
+## 🏗️ Architecture
+
+```
+TAEssentials.API.TSPlaywright/
+├── tests/
+│   └── api/
+│       ├── admin/              # Admin-level operation tests
+│       ├── regular/            # Regular user authorization tests
+│       └── unauthorized/       # Unauthenticated/public endpoint tests
+├── utils/
+│   ├── factories/              # Test data generators (ProductFactory, UserFactory)
+│   ├── urlBuilders/            # Fluent API for endpoint URLs
+│   ├── apiClient.ts            # HTTP client wrapper
+│   ├── logger.ts               # Winston-based logging
+│   ├── responseValidator.ts    # Response validation utilities
+│   └── testDecorators.ts       # Unified test metadata for Playwright + Allure
+├── models/                     # TypeScript interfaces for requests/responses
+└── config/                     # Configuration files
+```
 
 ## ✨ Features
 
-- **TypeScript** - Strong typing for better code quality
-- **Playwright** - Fast and reliable API testing
-- **Modular Architecture** - Clean separation of concerns
-- **Logger** - Winston-based logging for better debugging
-- **Test Data Generation** - Built-in utilities for test data
-- **Response Validation** - Reusable validators for API responses
-- **Multiple Reporters** - HTML, JSON, JUnit, and Allure reports
-- **ESLint & Prettier** - Code quality and formatting
+### Test Organization
+- **Role-based directory structure**: Separate test suites for admin, regular users, and unauthenticated scenarios
+- **Test case naming convention**: `TC ###P` for positive tests, `TC ###N` for negative tests
+- **Minimal redundancy**: Authorization tests focus on access control, not data validation
+
+### Factory Pattern
+```typescript
+// Generate realistic test data
+const product = ProductFactory.generateProduct();
+const invalidProduct = ProductFactory.generateProductWithNegativePrice();
+const user = UserFactory.generateUser();
+```
+
+### URL Builder
+```typescript
+// Fluent, type-safe endpoint construction
+await apiClient.post(LittleBugShop().Controllers.Products.create, { data });
+await apiClient.post(LittleBugShop().Controllers.Users.register, { data });
+```
+
+### Test Decorators
+```typescript
+// Unified metadata for Playwright and Allure
+TestDecorators.setupTestDescribe({
+  suite: 'Product Management API Tests',
+  epic: 'Product Management',
+  feature: 'Product Creation'
+});
+
+await TestDecorators.setupTest({
+  description: 'Validate successful product creation',
+  owner: 'Farum',
+  severity: Severity.CRITICAL
+});
+```
+
+### Meaningful Assertions
+Every assertion includes a descriptive error message:
+```typescript
+expect(response.status(), 'Product creation should return 201 Created status').toBe(201);
+expect(result.id, 'Product ID should be a positive number').toBeGreaterThan(0);
+expect(response.status(), 'Regular user should be forbidden from creating products (403 Forbidden)').toBe(403);
+```
+
+## 🛠️ Tech Stack
+
+- **TypeScript 5.3.0**: Type-safe test development
+- **Playwright Test 1.40.0**: Modern API testing framework
+- **Faker.js 10.1.0**: Realistic test data generation
+- **Allure 2.10.0**: Rich test reporting
+- **Winston 3.11.0**: Structured logging
+- **date-fns 2.30.0**: Date formatting utilities
 
 ## 🔧 Prerequisites
 
-- Node.js (v18 or higher)
+- Node.js (v18 or higher recommended)
 - npm or yarn
 - LittleBugShop API running on `http://localhost:5052`
 
 ## 📦 Installation
 
-1. Clone the repository:
 ```bash
-git clone <repository-url>
+# Clone the repository
+git clone https://github.com/farum12/TAEssentials.API.TSPlaywright.git
 cd TAEssentials.API.TSPlaywright
-```
 
-2. Install dependencies:
-```bash
+# Install dependencies
 npm install
 ```
 
-3. Install Playwright browsers:
+## 🧪 Running Tests
+
 ```bash
-npx playwright install
+# Run all tests
+npx playwright test
+
+# Run tests in UI mode
+npx playwright test --ui
+
+# Run specific test suite
+npx playwright test tests/api/admin/
+
+# Run tests with specific tag
+npx playwright test --grep @critical
+
+# Generate Allure report
+npm run report:generate
+npm run report:open
 ```
 
-4. Create environment configuration:
-```bash
-cp .env.example .env
-```
+## 📊 Test Coverage
+
+### Product Management API
+- **Admin Tests** (`tests/api/admin/productPostAdmin.spec.ts`):
+  - ✅ TC 001P: Successful product creation with valid data
+  - ✅ TC 002P: Product creation with minimal required fields
+  - ❌ TC 003N: Rejection of invalid data (empty name)
+  - ❌ TC 004N: Rejection of negative price
+  - ❌ TC 005N: Rejection of zero price
+  - ❌ TC 006N: Invalid ISBN format handling
+  - ❌ TC 007N: Rejection of empty fields
+  - ✅ TC 008P: Response structure validation
+
+- **Authorization Tests** (`tests/api/regular/productPostRegular.spec.ts`):
+  - ❌ TC 001N: Regular user forbidden from creating products (403)
+  
+- **Authentication Tests** (`tests/api/unauthorized/productPostUnauthorized.spec.ts`):
+  - ❌ TC 001N: Unauthenticated requests rejected (401)
+
+### User Management API
+- **User Registration** (`tests/api/unauthorized/userRegisterPostUnauthorized.spec.ts`):
+  - ✅ TC 001P: Successful registration with valid data
+  - ✅ TC 002P: Registration without optional fields
+  - ❌ TC 003N: Duplicate username rejection
+  - ❌ TC 004N: Duplicate email rejection
+  - ❌ TC 005N: Required field validation (username)
+  - ❌ TC 006N: Required field validation (password)
+  - ❌ TC 007N: Required field validation (email)
+  - ❌ TC 008N: Email format validation
+  - ❌ TC 009N: Password strength requirements
+  - ❌ TC 010N: Empty string values rejection
+  - ❌ TC 011N: Special characters in username handling
+  - ✅ TC 012P: Response structure validation
 
 ## ⚙️ Configuration
 
 The framework is pre-configured for LittleBugShop API:
 
 - **Base URL**: `http://localhost:5052`
-- **Swagger**: `http://localhost:5052/swagger/v1/swagger.json`
+- **Admin Credentials**: username: `admin`, password: `admin123`
+- **Regular User Credentials**: username: `User`, password: `qazwsxedcrfv12345`
+## 📖 Documentation
 
-Update `.env` file if you need different settings:
-```env
-BASE_URL=http://localhost:5052
-API_TIMEOUT=30000
-TEST_ENV=local
-LOG_LEVEL=info
-```
+- **[TESTING_STANDARDS.md](TESTING_STANDARDS.md)**: Comprehensive guide to coding standards, naming conventions, and best practices
 
-## 📁 Project Structure
+## 🎓 Best Practices Demonstrated
 
-```
-TAEssentials.API.TSPlaywright/
-├── config/                 # Configuration files
-│   └── api.config.ts      # API endpoints and settings
-├── models/                 # Data models and interfaces
-│   └── user.models.ts     # User-related models
-├── tests/                  # Test files
-│   └── api/               # API test suites
-│       └── register.spec.ts  # User registration tests
-├── utils/                  # Utility functions
-│   ├── apiClient.ts       # API client wrapper
-│   ├── logger.ts          # Winston logger configuration
-│   ├── responseValidator.ts # Response validation utilities
-│   └── testDataGenerator.ts # Test data generation
-├── test-results/          # Test results (auto-generated)
-├── reports/               # Test reports (auto-generated)
-└── playwright.config.ts   # Playwright configuration
-```
+1. **Self-Documenting Tests**: Clear test names, descriptive step labels, and meaningful assertion messages
+2. **DRY Principle**: Factory pattern eliminates hardcoded test data
+3. **Type Safety**: Full TypeScript integration with interfaces and generics
+4. **Separation of Concerns**: Utilities, factories, and tests are clearly separated
+5. **Test Organization**: Role-based directory structure for scalability
+6. **Fail Fast, Fail Clear**: Detailed error messages pinpoint exact failure reasons
 
-## ⚙️ Configuration
+## 🤝 Contributing
 
-### Playwright Configuration
+Contributions are welcome! Please follow the standards outlined in `TESTING_STANDARDS.md` to maintain consistency.
 
-Edit `playwright.config.ts` to customize:
-- Test directory
-- Parallel execution
-- Retries
-- Reporters
-- Timeouts
-- Base URL
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Follow the coding standards in `TESTING_STANDARDS.md`
+4. Add tests with proper TC naming (TC ###P/TC ###N)
+5. Commit your changes (`git commit -m 'Add amazing feature'`)
+6. Push to the branch (`git push origin feature/amazing-feature`)
+7. Open a Pull Request
 
-### API Configuration
+## 📝 License
 
-Edit `config/api.config.ts` to add/modify:
-- API endpoints
-- Environment-specific settings
-- Default headers
+This project is part of the Test Automation Essentials series.
 
-## 🚀 Running Tests
+## 👤 Author
 
-Run all tests:
-```bash
-npm test
-```
+**Farum**
+- GitHub: [@farum12](https://github.com/farum12)
 
-Run tests in headed mode:
-```bash
-npm run test:headed
-```
+## 🙏 Acknowledgments
 
-Run tests in debug mode:
-```bash
-npm run test:debug
-```
+- Built for testing the LittleBugShop API
+- Inspired by enterprise API testing best practices
+- Powered by the Playwright Test framework
 
-Run only API tests:
-```bash
-npm run test:api
-```
+---
 
-Run tests with UI mode:
-```bash
-npm run test:ui
-```
-
-Show test report:
-```bash
-npm run test:report
-```
-
-## 📝 Current Test Coverage
-
-### User Registration (POST /api/Users/register)
-
-✅ **Positive Scenarios:**
-- Successful registration with all required fields
-- Successful registration without optional phone number
-- Response structure validation
-- Special characters in username
-
-✅ **Negative Scenarios:**
-- Duplicate username rejection
-- Duplicate email rejection
-- Missing required fields (username, password, email)
-- Invalid email format
-- Weak password
-- Empty string values
-
-## 🛠️ Test Utilities
-
-### URL Builder
-
-Build API endpoint URLs with a fluent, type-safe interface:
-
-```typescript
-import { LittleBugShop } from '../../utils/urlBuilder';
-
-// Basic usage
-const url = LittleBugShop().Users.register();
-// Returns: "http://localhost:5052/api/Users/register"
-
-// With ID parameters
-const userUrl = LittleBugShop().Users.getById(123);
-// Returns: "http://localhost:5052/api/Users/123"
-
-// Other endpoints
-LittleBugShop().Users.login()
-LittleBugShop().Products.getById(456)
-LittleBugShop().Cart.checkout()
-LittleBugShop().Orders.myOrders()
-```
+**Note**: Ensure the LittleBugShop API is running on `http://localhost:5052` before executing tests.
 
 See [URL Builder Documentation](docs/UrlBuilder.md) for complete API reference.
 
@@ -192,73 +227,46 @@ const minimalUser = UserFactory.generateMinimalUser();
 
 // Generate user with custom fields
 const customUser = UserFactory.generateUser({
-  firstName: 'John',
-  email: 'custom@example.com'
-});
+## 📖 Documentation
 
-// Generate unique identifiers
-const username = UserFactory.generateUniqueUsername();
-const email = UserFactory.generateUniqueEmail();
+- **[TESTING_STANDARDS.md](TESTING_STANDARDS.md)**: Comprehensive guide to coding standards, naming conventions, and best practices
 
-// Negative testing scenarios
-const invalidEmailUser = UserFactory.generateUserWithInvalidEmail();
-const weakPasswordUser = UserFactory.generateUserWithWeakPassword();
-const emptyUser = UserFactory.generateUserWithEmptyFields();
-```
+## 🎓 Best Practices Demonstrated
 
-See [UserFactory Documentation](docs/UserFactory.md) for complete usage guide.
+1. **Self-Documenting Tests**: Clear test names, descriptive step labels, and meaningful assertion messages
+2. **DRY Principle**: Factory pattern eliminates hardcoded test data
+3. **Type Safety**: Full TypeScript integration with interfaces and generics
+4. **Separation of Concerns**: Utilities, factories, and tests are clearly separated
+5. **Test Organization**: Role-based directory structure for scalability
+6. **Fail Fast, Fail Clear**: Detailed error messages pinpoint exact failure reasons
 
-### API Client
-```typescript
-const response = await apiClient.post(endpoints.register, { data: registerData });
-```
+## 🤝 Contributing
 
-### Response Validator
-```typescript
-await ResponseValidator.validateStatusCode(response, 200);
-await ResponseValidator.validateContentType(response, 'application/json');
-const body = await ResponseValidator.getResponseBody<RegisterResponse>(response);
-```
+Contributions are welcome! Please follow the standards outlined in `TESTING_STANDARDS.md` to maintain consistency.
 
-### Test Data Generator
-```typescript
-const email = TestDataGenerator.generateRandomEmail();
-const username = `testuser_${TestDataGenerator.generateRandomString(8)}`;
-```
-
-## 📊 Reporting
-
-The framework generates multiple report formats:
-
-- **HTML Report**: `playwright-report/index.html`
-- **JSON Report**: `test-results/results.json`
-- **JUnit Report**: `test-results/junit.xml`
-
-## 🧹 Code Quality
-
-Format code:
-```bash
-npm run format
-```
-
-Lint code:
-```bash
-npm run lint
-```
-
-Fix linting issues:
-```bash
-npm run lint:fix
-```
-
-## 🔗 API Documentation
-
-Swagger UI: `http://localhost:5052/swagger/v1/swagger.json`
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Follow the coding standards in `TESTING_STANDARDS.md`
+4. Add tests with proper TC naming (TC ###P/TC ###N)
+5. Commit your changes (`git commit -m 'Add amazing feature'`)
+6. Push to the branch (`git push origin feature/amazing-feature`)
+7. Open a Pull Request
 
 ## 📝 License
 
-ISC
+This project is part of the Test Automation Essentials series.
+
+## 👤 Author
+
+**Farum**
+- GitHub: [@farum12](https://github.com/farum12)
+
+## 🙏 Acknowledgments
+
+- Built for testing the LittleBugShop API
+- Inspired by enterprise API testing best practices
+- Powered by the Playwright Test framework
 
 ---
 
-**Happy Testing! 🎯**
+**Note**: Ensure the LittleBugShop API is running on `http://localhost:5052` before executing tests.
