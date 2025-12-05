@@ -41,3 +41,4 @@ build/
 # Playwright
 playwright/.cache/
 trace.zip
+test-reports/
