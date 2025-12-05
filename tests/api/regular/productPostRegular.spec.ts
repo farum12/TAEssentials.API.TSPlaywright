@@ -1,3 +1,5 @@
+// tests/api/regular/productPostRegular.spec.ts
+
 import { test, expect } from '@playwright/test';
 import { ApiClient } from '../../../utils/apiClient';
 import { ResponseValidator } from '../../../utils/responseValidator';
@@ -32,7 +34,7 @@ test.describe('Product Creation API Tests - Regular User Authorization - POST /a
     authToken = loginResult.token;
   });
 
-  test('TC 001 Validate regular user cannot create product', async () => {
+  test('TC 001N Validate regular user cannot create product', async () => {
     await TestDecorators.setupTest({
       description: 'Validate regular user is forbidden from creating products',
       owner: 'Farum',

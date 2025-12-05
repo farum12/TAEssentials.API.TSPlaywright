@@ -1,3 +1,5 @@
+// tests/api/unauthorized/productPostUnauthorized.spec.ts
+
 import { test, expect } from '@playwright/test';
 import { ApiClient } from '../../../utils/apiClient';
 import { ProductFactory, Product } from '../../../utils/factories/productFactory';
@@ -21,7 +23,7 @@ test.describe('Product Creation API Tests - Regular User Authorization - POST /a
     // Do not login to get authentication token as this test is for unauthorized access
   });
 
-  test('TC 001 Validate unauthenticated product creation is rejected', async () => {
+  test('TC 001N Validate unauthenticated product creation is rejected', async () => {
     await TestDecorators.setupTest({
       description: 'Validate API rejects product creation without authentication',
       owner: 'Farum',

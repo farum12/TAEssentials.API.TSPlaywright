@@ -1,3 +1,5 @@
+// tests/api/admin/productPostAdmin.spec.ts
+
 import { test, expect } from '@playwright/test';
 import { ApiClient } from '../../../utils/apiClient';
 import { ResponseValidator } from '../../../utils/responseValidator';

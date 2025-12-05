@@ -1,3 +1,5 @@
+// tests/api/unauthorized/userRegisterPostUnauthorized.spec.ts
+
 import { test, expect } from '@playwright/test';
 import { ApiClient } from '../../../utils/apiClient';
 import { ResponseValidator } from '../../../utils/responseValidator';
@@ -22,7 +24,7 @@ test.describe('User Registration API Tests - POST /api/Users/register', () => {
   });
 
 
-  test('TC 001 Validate successful user registration with valid data', async () => {
+  test('TC 001P Validate successful user registration with valid data', async () => {
     await TestDecorators.setupTest({
       description: 'Validate successful user registration with all valid fields',
       owner: 'Farum',
@@ -65,7 +67,7 @@ test.describe('User Registration API Tests - POST /api/Users/register', () => {
     });
   });
 
-  test('TC 002 Validate successful registration without optional phone number', async () => {
+  test('TC 002P Validate successful registration without optional phone number', async () => {
     await TestDecorators.setupTest({
       description: 'Validate successful user registration without optional phone number field',
       owner: 'Farum',
@@ -100,7 +102,7 @@ test.describe('User Registration API Tests - POST /api/Users/register', () => {
     });
   });
 
-  test('TC 003 Validate rejection of duplicate username', async () => {
+  test('TC 003N Validate rejection of duplicate username', async () => {
     await TestDecorators.setupTest({
       description: 'Validate API rejects registration with duplicate username',
       owner: 'Farum',
@@ -137,7 +139,7 @@ test.describe('User Registration API Tests - POST /api/Users/register', () => {
     });
   });
 
-  test('TC 004 Validate rejection of duplicate email', async () => {
+  test('TC 004N Validate rejection of duplicate email', async () => {
     await TestDecorators.setupTest({
       description: 'Validate API rejects registration with duplicate email address',
       owner: 'Farum',
@@ -174,7 +176,7 @@ test.describe('User Registration API Tests - POST /api/Users/register', () => {
     });
   });
 
-  test('TC 005 Validate required field validation for username', async () => {
+  test('TC 005N Validate required field validation for username', async () => {
     await TestDecorators.setupTest({
       description: 'Validate API requires username field in registration request',
       owner: 'Farum',
@@ -201,7 +203,7 @@ test.describe('User Registration API Tests - POST /api/Users/register', () => {
     });
   });
 
-  test('TC 006 Validate required field validation for password', async () => {
+  test('TC 006N Validate required field validation for password', async () => {
     await TestDecorators.setupTest({
       description: 'Validate API requires password field in registration request',
       owner: 'Farum',
@@ -228,7 +230,7 @@ test.describe('User Registration API Tests - POST /api/Users/register', () => {
     });
   });
 
-  test('TC 007 Validate required field validation for email', async () => {
+  test('TC 007N Validate required field validation for email', async () => {
     await TestDecorators.setupTest({
       description: 'Validate API requires email field in registration request',
       owner: 'Farum',
@@ -255,7 +257,7 @@ test.describe('User Registration API Tests - POST /api/Users/register', () => {
     });
   });
 
-  test('TC 008 Validate email format validation', async () => {
+  test('TC 008N Validate email format validation', async () => {
     await TestDecorators.setupTest({
       description: 'Validate API rejects invalid email format in registration',
       owner: 'Farum',
@@ -280,7 +282,7 @@ test.describe('User Registration API Tests - POST /api/Users/register', () => {
     });
   });
 
-  test('TC 009 Validate password strength requirements', async () => {
+  test('TC 009N Validate password strength requirements', async () => {
     await TestDecorators.setupTest({
       description: 'Validate API enforces password strength requirements',
       owner: 'Farum',
@@ -305,7 +307,7 @@ test.describe('User Registration API Tests - POST /api/Users/register', () => {
     });
   });
 
-  test('TC 010 Validate rejection of empty string values', async () => {
+  test('TC 010N Validate rejection of empty string values', async () => {
     await TestDecorators.setupTest({
       description: 'Validate API rejects registration with empty string values',
       owner: 'Farum',
@@ -330,7 +332,7 @@ test.describe('User Registration API Tests - POST /api/Users/register', () => {
     });
   });
 
-  test('TC 011 Validate handling of special characters in username', async () => {
+  test('TC 011N Validate handling of special characters in username', async () => {
     await TestDecorators.setupTest({
       description: 'Validate API handling of special characters in username field',
       owner: 'Farum',
@@ -360,7 +362,7 @@ test.describe('User Registration API Tests - POST /api/Users/register', () => {
     });
   });
 
-  test('TC 012 Validate response structure for successful registration', async () => {
+  test('TC 012P Validate response structure for successful registration', async () => {
     await TestDecorators.setupTest({
       description: 'Validate response structure and data types for successful registration',
       owner: 'Farum',
