@@ -25,7 +25,7 @@ export function createLittleBugShopEndpoints(buildUrl: (path: string) => string)
         },
         Cart: {
             get: buildUrl('/Cart'),
-            clear: buildUrl('/Cart'),
+            delete: buildUrl('/Cart'),
             addItem: buildUrl('/Cart/items'),
             updateItem: (itemId: number | string) => buildUrl(`/Cart/items/${itemId}`),
             removeItem: (itemId: number | string) => buildUrl(`/Cart/items/${itemId}`),
