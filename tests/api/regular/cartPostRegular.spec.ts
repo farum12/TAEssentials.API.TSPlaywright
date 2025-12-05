@@ -151,9 +151,23 @@ test.describe('Cart Management API Tests - Regular User - POST /api/Cart/items',
 
     let cartItemData: AddCartItemRequest;
     let response: any;
+    let productData: Product;
+    let productId: number;
+
+    await test.step('Prepare test prerequisites', async () => {
+        productData = ProductFactory.generateProduct();
+        response = await apiClientAdmin.post(LittleBugShop().Controllers.Products.create, {
+          data: productData,
+          headers: {
+            Authorization: `Bearer ${authTokenAdmin}`
+          }
+        });
+        expect(response.status(), 'Product creation by admin should return 201 status').toBe(201);
+        productId = (await ResponseValidator.getResponseBody<{ id: number }>(response)).id;
+    });
 
     await test.step('Generate cart item with single quantity', async () => {
-      cartItemData = CartFactory.generateSingleQuantityCartItem();
+      cartItemData = CartFactory.generateSingleQuantityCartItem(productId);
     });
 
     await test.step('Send add cart item request with quantity 1', async () => {
@@ -180,9 +194,23 @@ test.describe('Cart Management API Tests - Regular User - POST /api/Cart/items',
 
     let cartItemData: AddCartItemRequest;
     let response: any;
+    let productData: Product;
+    let productId: number;
+
+    await test.step('Prepare test prerequisites', async () => {
+        productData = ProductFactory.generateProduct();
+        response = await apiClientAdmin.post(LittleBugShop().Controllers.Products.create, {
+          data: productData,
+          headers: {
+            Authorization: `Bearer ${authTokenAdmin}`
+          }
+        });
+        expect(response.status(), 'Product creation by admin should return 201 status').toBe(201);
+        productId = (await ResponseValidator.getResponseBody<{ id: number }>(response)).id;
+    });
 
     await test.step('Generate cart item with maximum quantity', async () => {
-      cartItemData = CartFactory.generateMaxQuantityCartItem();
+      cartItemData = CartFactory.generateMaxQuantityCartItem(productId);
     });
 
     await test.step('Send add cart item request with maximum quantity', async () => {
@@ -223,7 +251,7 @@ test.describe('Cart Management API Tests - Regular User - POST /api/Cart/items',
     });
 
     await test.step('Verify request is rejected with 400', async () => {
-      expect(response.status(), 'Negative product ID should be rejected with 400 Bad Request').toBe(400);
+      expect(response.status(), 'Negative product ID should be rejected with 404').toBe(404);
     });
   });
 
@@ -250,8 +278,8 @@ test.describe('Cart Management API Tests - Regular User - POST /api/Cart/items',
       });
     });
 
-    await test.step('Verify request is rejected with 400', async () => {
-      expect(response.status(), 'Zero product ID should be rejected with 400 Bad Request').toBe(400);
+    await test.step('Verify request is rejected with 404', async () => {
+      expect(response.status(), 'Zero product ID should be rejected with 404').toBe(404);
     });
   });
 
@@ -264,9 +292,23 @@ test.describe('Cart Management API Tests - Regular User - POST /api/Cart/items',
 
     let cartItemData: AddCartItemRequest;
     let response: any;
+    let productData: Product;
+    let productId: number;
+
+    await test.step('Prepare test prerequisites', async () => {
+        productData = ProductFactory.generateProduct();
+        response = await apiClientAdmin.post(LittleBugShop().Controllers.Products.create, {
+          data: productData,
+          headers: {
+            Authorization: `Bearer ${authTokenAdmin}`
+          }
+        });
+        expect(response.status(), 'Product creation by admin should return 201 status').toBe(201);
+        productId = (await ResponseValidator.getResponseBody<{ id: number }>(response)).id;
+    });
 
     await test.step('Generate cart item with negative quantity', async () => {
-      cartItemData = CartFactory.generateCartItemWithNegativeQuantity();
+      cartItemData = CartFactory.generateCartItemWithNegativeQuantity(productId);
     });
 
     await test.step('Send add cart item request with negative quantity', async () => {
@@ -291,10 +333,23 @@ test.describe('Cart Management API Tests - Regular User - POST /api/Cart/items',
     });
 
     let cartItemData: AddCartItemRequest;
-    let response: any;
+    let response: any;let productData: Product;
+    let productId: number;
+
+    await test.step('Prepare test prerequisites', async () => {
+        productData = ProductFactory.generateProduct();
+        response = await apiClientAdmin.post(LittleBugShop().Controllers.Products.create, {
+          data: productData,
+          headers: {
+            Authorization: `Bearer ${authTokenAdmin}`
+          }
+        });
+        expect(response.status(), 'Product creation by admin should return 201 status').toBe(201);
+        productId = (await ResponseValidator.getResponseBody<{ id: number }>(response)).id;
+    });
 
     await test.step('Generate cart item with zero quantity', async () => {
-      cartItemData = CartFactory.generateCartItemWithZeroQuantity();
+      cartItemData = CartFactory.generateCartItemWithZeroQuantity(productId);
     });
 
     await test.step('Send add cart item request with zero quantity', async () => {

@@ -55,8 +55,9 @@ export class CartFactory {
   /**
    * Generate a cart item with negative quantity (for validation testing)
    */
-  static generateCartItemWithNegativeQuantity(): AddCartItemRequest {
+  static generateCartItemWithNegativeQuantity(productId?: number): AddCartItemRequest {
     return this.generateCartItem({
+      productId,
       quantity: -faker.number.int({ min: 1, max: 10 }),
     });
   }
@@ -64,15 +65,16 @@ export class CartFactory {
   /**
    * Generate a cart item with zero quantity
    */
-  static generateCartItemWithZeroQuantity(): AddCartItemRequest {
-    return this.generateCartItem({ quantity: 0 });
+  static generateCartItemWithZeroQuantity(productId?: number): AddCartItemRequest {
+    return this.generateCartItem({ productId, quantity: 0 });
   }
 
   /**
    * Generate a cart item with very large quantity
    */
-  static generateCartItemWithLargeQuantity(): AddCartItemRequest {
+  static generateCartItemWithLargeQuantity(productId?: number): AddCartItemRequest {
     return this.generateCartItem({
+      productId,
       quantity: faker.number.int({ min: 1000, max: 10000 }),
     });
   }
@@ -114,14 +116,14 @@ export class CartFactory {
   /**
    * Generate a cart item with single quantity (buy one item)
    */
-  static generateSingleQuantityCartItem(): AddCartItemRequest {
-    return this.generateCartItem({ quantity: 1 });
+  static generateSingleQuantityCartItem(productId?: number): AddCartItemRequest {
+    return this.generateCartItem({ productId, quantity: 1 });
   }
 
   /**
    * Generate a cart item with maximum typical quantity
    */
-  static generateMaxQuantityCartItem(): AddCartItemRequest {
-    return this.generateCartItem({ quantity: 99 });
+  static generateMaxQuantityCartItem(productId?: number): AddCartItemRequest {
+    return this.generateCartItem({ productId, quantity: 99 });
   }
 }
