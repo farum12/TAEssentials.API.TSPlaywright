@@ -4,15 +4,31 @@ import { ResponseValidator } from '../../utils/responseValidator';
 import { UserFactory } from '../../utils/userFactory';
 import { LittleBugShop } from '../../utils/urlBuilder';
 import { RegisterRequest, RegisterResponse } from '../../models/user.models';
+import { TestDecorators, TestSeverity as Severity } from '@utils/testDecorators';
 
-test.describe('User Registration API Tests - POST /api/Users/register', () => {
   let apiClient: ApiClient;
 
   test.beforeEach(async ({ request }) => {
     apiClient = new ApiClient(request);
   });
 
+
+test.describe('User Registration API Tests - POST /api/Users/register', () => {
+  TestDecorators.setupTestDescribe({
+    suite: 'User Registration API Tests',
+    suiteDescription: 'Tests for the POST /api/Users/register endpoint',
+    epic: 'User Management',
+    feature: 'User Registration'
+  });
+
+
   test('TC 001 Validate successful user registration with valid data', async () => {
+    await TestDecorators.setupTest({
+      description: 'Validate successful user registration with all valid fields',
+      owner: 'Farum',
+      severity: Severity.CRITICAL
+    });
+
     let registerData: RegisterRequest;
     let response: any;
     let result: RegisterResponse;
@@ -28,7 +44,7 @@ test.describe('User Registration API Tests - POST /api/Users/register', () => {
     });
 
     await test.step('Validate response status and content type', async () => {
-      await ResponseValidator.validateStatusCode(response, 201);
+      expect(response.status()).toBe(201);
       await ResponseValidator.validateContentType(response, 'application/json');
     });
 
@@ -50,6 +66,12 @@ test.describe('User Registration API Tests - POST /api/Users/register', () => {
   });
 
   test('TC 002 Validate successful registration without optional phone number', async () => {
+    await TestDecorators.setupTest({
+      description: 'Validate successful user registration without optional phone number field',
+      owner: 'Farum',
+      severity: Severity.NORMAL
+    });
+
     let registerData: RegisterRequest;
     let response: any;
     let result: RegisterResponse;
@@ -65,7 +87,7 @@ test.describe('User Registration API Tests - POST /api/Users/register', () => {
     });
 
     await test.step('Validate response status', async () => {
-      await ResponseValidator.validateStatusCode(response, 201);
+      expect(response.status()).toBe(201);
     });
 
     await test.step('Parse response body', async () => {
@@ -79,6 +101,12 @@ test.describe('User Registration API Tests - POST /api/Users/register', () => {
   });
 
   test('TC 003 Validate rejection of duplicate username', async () => {
+    await TestDecorators.setupTest({
+      description: 'Validate API rejects registration with duplicate username',
+      owner: 'Farum',
+      severity: Severity.CRITICAL
+    });
+
     let username: string;
     let registerData: RegisterRequest;
     let firstResponse: any;
@@ -94,7 +122,7 @@ test.describe('User Registration API Tests - POST /api/Users/register', () => {
       firstResponse = await apiClient.post(LittleBugShop().Users.register(), {
         data: registerData,
       });
-      await ResponseValidator.validateStatusCode(firstResponse, 201);
+      expect(firstResponse.status()).toBe(201);
     });
 
     await test.step('Attempt duplicate registration with same username', async () => {
@@ -104,12 +132,18 @@ test.describe('User Registration API Tests - POST /api/Users/register', () => {
       });
     });
 
-    await test.step('Verify duplicate is rejected with 400 or 409', async () => {
-      expect([400, 409]).toContain(duplicateResponse.status());
+    await test.step('Verify duplicate is rejected with 400', async () => {
+      expect(duplicateResponse.status()).toBe(400);
     });
   });
 
   test('TC 004 Validate rejection of duplicate email', async () => {
+    await TestDecorators.setupTest({
+      description: 'Validate API rejects registration with duplicate email address',
+      owner: 'Farum',
+      severity: Severity.CRITICAL
+    });
+
     let email: string;
     let registerData: RegisterRequest;
     let firstResponse: any;
@@ -125,7 +159,7 @@ test.describe('User Registration API Tests - POST /api/Users/register', () => {
       firstResponse = await apiClient.post(LittleBugShop().Users.register(), {
         data: registerData,
       });
-      await ResponseValidator.validateStatusCode(firstResponse, 201);
+      expect(firstResponse.status()).toBe(201);
     });
 
     await test.step('Attempt duplicate registration with same email', async () => {
@@ -136,11 +170,17 @@ test.describe('User Registration API Tests - POST /api/Users/register', () => {
     });
 
     await test.step('Verify duplicate is rejected with 400 or 409', async () => {
-      expect([400, 409]).toContain(duplicateResponse.status());
+      expect(duplicateResponse.status()).toBe(400);
     });
   });
 
   test('TC 005 Validate required field validation for username', async () => {
+    await TestDecorators.setupTest({
+      description: 'Validate API requires username field in registration request',
+      owner: 'Farum',
+      severity: Severity.CRITICAL
+    });
+
     let incompleteData: any;
     let response: any;
 
@@ -157,11 +197,17 @@ test.describe('User Registration API Tests - POST /api/Users/register', () => {
     });
 
     await test.step('Verify request is rejected with 400', async () => {
-      await ResponseValidator.validateStatusCode(response, 400);
+      expect(response.status()).toBe(400);
     });
   });
 
   test('TC 006 Validate required field validation for password', async () => {
+    await TestDecorators.setupTest({
+      description: 'Validate API requires password field in registration request',
+      owner: 'Farum',
+      severity: Severity.CRITICAL
+    });
+
     let incompleteData: any;
     let response: any;
 
@@ -178,11 +224,17 @@ test.describe('User Registration API Tests - POST /api/Users/register', () => {
     });
 
     await test.step('Verify request is rejected with 400', async () => {
-      await ResponseValidator.validateStatusCode(response, 400);
+      expect(response.status()).toBe(400);
     });
   });
 
   test('TC 007 Validate required field validation for email', async () => {
+    await TestDecorators.setupTest({
+      description: 'Validate API requires email field in registration request',
+      owner: 'Farum',
+      severity: Severity.CRITICAL
+    });
+
     let incompleteData: any;
     let response: any;
 
@@ -199,11 +251,17 @@ test.describe('User Registration API Tests - POST /api/Users/register', () => {
     });
 
     await test.step('Verify request is rejected with 400', async () => {
-      await ResponseValidator.validateStatusCode(response, 400);
+      expect(response.status()).toBe(400);
     });
   });
 
   test('TC 008 Validate email format validation', async () => {
+    await TestDecorators.setupTest({
+      description: 'Validate API rejects invalid email format in registration',
+      owner: 'Farum',
+      severity: Severity.NORMAL
+    });
+
     let registerData: RegisterRequest;
     let response: any;
 
@@ -218,11 +276,17 @@ test.describe('User Registration API Tests - POST /api/Users/register', () => {
     });
 
     await test.step('Verify request is rejected with 400', async () => {
-      await ResponseValidator.validateStatusCode(response, 400);
+      expect(response.status()).toBe(400);
     });
   });
 
   test('TC 009 Validate password strength requirements', async () => {
+    await TestDecorators.setupTest({
+      description: 'Validate API enforces password strength requirements',
+      owner: 'Farum',
+      severity: Severity.NORMAL
+    });
+
     let registerData: RegisterRequest;
     let response: any;
 
@@ -237,11 +301,17 @@ test.describe('User Registration API Tests - POST /api/Users/register', () => {
     });
 
     await test.step('Verify request is rejected with 400', async () => {
-      await ResponseValidator.validateStatusCode(response, 400);
+      expect(response.status()).toBe(400);
     });
   });
 
   test('TC 010 Validate rejection of empty string values', async () => {
+    await TestDecorators.setupTest({
+      description: 'Validate API rejects registration with empty string values',
+      owner: 'Farum',
+      severity: Severity.NORMAL
+    });
+
     let registerData: RegisterRequest;
     let response: any;
 
@@ -256,11 +326,17 @@ test.describe('User Registration API Tests - POST /api/Users/register', () => {
     });
 
     await test.step('Verify request is rejected with 400', async () => {
-      await ResponseValidator.validateStatusCode(response, 400);
+      expect(response.status()).toBe(400);
     });
   });
 
   test('TC 011 Validate handling of special characters in username', async () => {
+    await TestDecorators.setupTest({
+      description: 'Validate API handling of special characters in username field',
+      owner: 'Farum',
+      severity: Severity.MINOR
+    });
+
     let registerData: RegisterRequest;
     let response: any;
 
@@ -279,12 +355,18 @@ test.describe('User Registration API Tests - POST /api/Users/register', () => {
         const result = await ResponseValidator.getResponseBody<RegisterResponse>(response);
         expect(result.user.username).toBe(registerData.username);
       } else {
-        await ResponseValidator.validateStatusCode(response, 400);
+        expect(response.status()).toBe(400);
       }
     });
   });
 
   test('TC 012 Validate response structure for successful registration', async () => {
+    await TestDecorators.setupTest({
+      description: 'Validate response structure and data types for successful registration',
+      owner: 'Farum',
+      severity: Severity.NORMAL
+    });
+
     let registerData: RegisterRequest;
     let response: any;
     let result: RegisterResponse;
@@ -300,7 +382,7 @@ test.describe('User Registration API Tests - POST /api/Users/register', () => {
     });
 
     await test.step('Validate response status', async () => {
-      await ResponseValidator.validateStatusCode(response, 201);
+      expect(response.status()).toBe(201);
     });
 
     await test.step('Parse response body', async () => {
