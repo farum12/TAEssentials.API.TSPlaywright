@@ -1,29 +1,31 @@
-import { defineConfig, devices } from '@playwright/test';
+import { defineConfig } from '@playwright/test';
 import * as dotenv from 'dotenv';
+import path from 'path';
+import { format } from 'date-fns';
 
-dotenv.config();
+const environment = process.env.ENV || 'local';
+dotenv.config({ path: path.resolve(__dirname, `envProfiles/${environment}.env`) });
 
 export default defineConfig({
   testDir: './tests',
   fullyParallel: true,
-  forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : undefined,
+  retries: 1,
+  workers: 4,
   reporter: [
-    ['html', { outputFolder: 'playwright-report' }],
-    ['json', { outputFile: 'test-results/results.json' }],
-    ['junit', { outputFile: 'test-results/junit.xml' }],
-    ['list'],
-    ['allure-playwright'],
+    ['html', { outputFolder: `test-reports/${format(new Date(), 'yyyy-MM-dd HH-mm')}-${environment}` }],
+    ['allure-playwright', { 
+      resultsDir: `allure-results/${format(new Date(), 'yyyy-MM-dd HH-mm')}-${environment}`,
+      environmentInfo: {
+        Environment: environment,
+        Framework: 'Playwright',
+        Language: 'TypeScript'
+      }
+    }]
   ],
   use: {
-    baseURL: process.env.BASE_URL || 'http://localhost:5052',
-    extraHTTPHeaders: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-    },
+    headless: true,
+    screenshot: 'off',
     trace: 'retain-on-failure',
-    screenshot: 'only-on-failure',
   },
   timeout: 60000,
   expect: {
@@ -32,10 +34,7 @@ export default defineConfig({
   projects: [
     {
       name: 'API Tests',
-      testMatch: /.*\.spec\.ts/,
-      use: {
-        ...devices['Desktop Chrome'],
-      },
+      testDir: './tests/api',
     },
   ],
 });
